@@ -13,8 +13,8 @@ class Recipe(models.Model):
     title = models.TextField(max_length=200)
     summary = models.TextField(blank=True)
     slug = models.SlugField(blank=True)
-    ingredients = jsonfield.JSONField()
-    steps = jsonfield.JSONField()
+#    ingredients = jsonfield.JSONField()
+#    steps = jsonfield.JSONField()
 
     class Meta:
         ordering = ['title']
@@ -22,3 +22,9 @@ class Recipe(models.Model):
 
     def __unicode__(self):
         return self.title
+
+class Version(models.Model):
+	recipe = models.ForeignKey(Recipe)
+	ingredients = jsonfield.JSONField()
+	steps = jsonfield.JSONField()
+	Note = models.TextField(blank=True)

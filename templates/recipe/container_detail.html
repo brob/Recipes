@@ -1,7 +1,7 @@
 <html>
 <h1>{{ container.title }}</h1>
 <p>{{ container.summary }}</p>
-Versions: {{ container.version_set.count }}
+Versions: {{ version.ingredients }}
 ID = {{ container }}
 
 
@@ -9,7 +9,7 @@ ID = {{ container }}
 <br/>
 <h2>Ingredients</h2>
 <ul>
-{% for ingredient, value in ingredients.items %}
+{% for ingredient, value in version.ingredients.items %}
 
 	<li>{{ value.amt }} -- {{ value.ingredient }}</li>
 
@@ -18,32 +18,22 @@ ID = {{ container }}
 
 <h2>Steps</h2>
 <ol>
-{% for key, step in steps.items %}
+{% for key, step in version.steps.items %}
 
 	<li>{{ step.step }}</li>
 
 {% endfor %}
 </ol>
 
-{% for version in container.version_set.all %}
+<h2>Versions</h2>
 
-{% if forloop.first %}
+{% for version in version_list %}
 
-<h3>Ingredients</h3>
-
-	<li>{{ version.Ingredients }}</li>
-
-<h3>Steps</h3>
-
-	<li>{{ version.Steps }}</li>
-
-<h3>Notes</h3>
-<p>{{ version.Note }}</p>
-	
-	
-{% endif %}
+	{{ version.Note }}
 
 {% endfor %}
+
+
 <h1>Edit recipe</h1>
 
 

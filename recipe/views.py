@@ -85,7 +85,8 @@ def RecipeEdit(request, slug):
 #        "ingredient_formset": ingredient_formset,
 #        "step_formset": step_formset,
         "container": container,
-        "ingredients": container.ingredients,
-        "steps": container.steps,
+        "version": container.version_set.latest(field_name='id'),
+        "version_list": container.version_set.all().reverse(),
+#        "steps": container.steps,
 #        "test": simplejson.loads('[%s]' % json.dumps(container.ingredients)[:-1]),
     }, context_instance=RequestContext(request))
