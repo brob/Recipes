@@ -1,12 +1,8 @@
 from django.contrib import admin
-from recipe.models import Category, Container, Version, Ingredient, Step
+from recipe.models import *
 
 
-class ContainerAdmin(admin.ModelAdmin):
+class RecipeAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
 
-admin.site.register(Category)
-admin.site.register(Container, ContainerAdmin)
-admin.site.register(Version)
-admin.site.register(Ingredient)
-admin.site.register(Step)
+admin.site.register(Recipe, RecipeAdmin)

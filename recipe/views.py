@@ -8,7 +8,8 @@ from django.core.context_processors import csrf
 from django.forms.models import inlineformset_factory
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
+import json
+import django.utils.simplejson as simplejson
 
 def current_datetime(request):
     now = datetime.datetime.now()
@@ -17,7 +18,7 @@ def current_datetime(request):
     
 class RecipeList(ListView):
 	
-	model = Container
+	model = Recipe
 	
 	def get_context_data(self, **kwargs):
 		context = super(RecipeList, self).get_context_data(**kwargs)
@@ -25,14 +26,14 @@ class RecipeList(ListView):
 		return context
 
 class RecipeDetail(DetailView):
-	model = Container
+	model = Recipe
 
 
 
 	def get_context_data(self, **kwargs):
 		context = super(RecipeDetail, self).get_context_data(**kwargs)
 		version_container = context['container'].id
-		version_form = VersionForm(initial={'Container': version_container})
+		version_form = VersionForm(initial={'Recipe': version_container})
 		IngredientInlineFormSet = IngredientFormSet
 		StepInlineFormSet = StepFormSet   
 	
@@ -47,7 +48,7 @@ def RecipeEdit(request, slug):
     ingredient_formset = {}
     step_formset = {}
     slugValue = slug
-    container = Container.objects.get(slug = slugValue)
+    container = Recipe.objects.get(slug = slugValue)
 
     if request.POST:
 	c = {}
@@ -74,15 +75,17 @@ def RecipeEdit(request, slug):
 	c = {}
 	c.update(csrf(request))
         version_container = container.id
-        version_id = container.version_set.latest('id')
-        form = VersionForm(initial={'Container': version_container})
-        ingredient_formset = IngredientFormSet(instance=Version(), initial={"Recipe": version_id})
-    	step_formset = StepFormSet(instance=Version())
-        container = Container.objects.get(slug = slugValue)
+ #       version_id = container.version_set.latest('id')
+#        form = VersionForm(initial={'Recipe': version_container})
+#        ingredient_formset = IngredientFormSet(instance=Version(), initial={"Recipe": version_id})
+#    	step_formset = StepFormSet(instance=Version())
+        container = Recipe.objects.get(slug = slugValue)
     return render_to_response("recipe/container_detail.html", {
-        "form": form,
-        "ingredient_formset": ingredient_formset,
-        "step_formset": step_formset,
+#        "form": form,
+#        "ingredient_formset": ingredient_formset,
+#        "step_formset": step_formset,
         "container": container,
-        "test": version_id,
+        "ingredients": container.ingredients,
+        "steps": container.steps,
+#        "test": simplejson.loads('[%s]' % json.dumps(container.ingredients)[:-1]),
     }, context_instance=RequestContext(request))

@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from recipe.models import Container
+from recipe.models import *
 from recipe.views import *
 from django.views.generic import *
 from django.http import HttpResponse
@@ -13,7 +13,7 @@ admin.autodiscover()
 
 
 info_dict = {
-    'queryset': Container.objects.all(),
+    'queryset': Recipe.objects.all(),
 }
 
 urlpatterns = patterns('',

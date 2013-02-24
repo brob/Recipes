@@ -7,7 +7,24 @@ ID = {{ container }}
 
 
 <br/>
-Test value {{ test }}<br /><br/>
+<h2>Ingredients</h2>
+<ul>
+{% for ingredient, value in ingredients.items %}
+
+	<li>{{ value.amt }} -- {{ value.ingredient }}</li>
+
+{% endfor %}
+</ul>
+
+<h2>Steps</h2>
+<ol>
+{% for key, step in steps.items %}
+
+	<li>{{ step.step }}</li>
+
+{% endfor %}
+</ol>
+
 {% for version in container.version_set.all %}
 
 {% if forloop.first %}
@@ -18,7 +35,7 @@ Test value {{ test }}<br /><br/>
 
 <h3>Steps</h3>
 
-	<li>{{ version.Steps }}
+	<li>{{ version.Steps }}</li>
 
 <h3>Notes</h3>
 <p>{{ version.Note }}</p>
