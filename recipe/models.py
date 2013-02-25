@@ -1,11 +1,12 @@
 from django.db import models
 #from tagging.fields import TagField
 from django.contrib import admin
-#import django.forms as forms
+import django.forms as forms
 from django.forms import ModelForm
 from django import forms
-from django.forms.models import inlineformset_factory
+from django.forms.formsets import formset_factory
 import jsonfield
+from django.forms.widgets import *
 
 
  
@@ -28,3 +29,24 @@ class Version(models.Model):
 	ingredients = jsonfield.JSONField()
 	steps = jsonfield.JSONField()
 	Note = models.TextField(blank=True)
+
+
+
+
+# Forms
+class IngredientForm(forms.Form):
+	amt = forms.CharField()
+	ingredient = forms.CharField()
+
+class StepForm(forms.Form):
+	step = forms.CharField()
+
+class VersionForm(forms.ModelForm):
+	class Meta:
+		model = Version
+		widgets = {
+			'recipe' : forms.HiddenInput(),
+			'ingredients' : forms.HiddenInput(),
+			'steps' : forms.HiddenInput(),
+		}
+		
