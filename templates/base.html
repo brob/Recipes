@@ -1,0 +1,170 @@
+<html>
+<head>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
+<style>
+.container input {
+	height:30px;
+}
+.container input.btn {
+	padding:8px 30px;
+}
+input.amt {
+	width:40px;
+}
+
+</style>
+{% block post_style %}{% endblock %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+{% block post_script %}{% endblock %}
+
+</head>
+
+<body>
+
+
+{% block body %}{% endblock %}
+
+
+<script>
+
+var recipe = {
+
+	forms: {
+	
+		recipeForm: function() {
+			if ($("#id_ingredients").length) {
+				var ingredientsJsonField = $("#id_ingredients");
+			} else {
+				var ingredientsJsonField = $("#id_version_set-0-ingredients");
+			}
+			if ($("#id_steps").length) {
+				var stepsJsonField = $("#id_steps");
+			} else {
+				var stepsJsonField = $("#id_version_set-0-steps");
+			}
+			var prePops = $(".pre_pop");
+			var submit = $("#submitIngredients");
+			var fieldID;
+			
+			$("#submitRecipe").click(function(e) {
+				e.preventDefault();
+				var fieldSets = $("form fieldset");
+				var ingredients = {};
+				var steps = {};
+				$.each(fieldSets, function(key, fieldset) {
+					var fieldID = "";
+					var self = this;
+					fieldID = fieldset.id.split("_");					
+					var amountField = $(self).find("input.amt");
+					var ingredientField = $(self).find("input.ingredient");
+					var stepField = $(self).find("textarea.step")
+					if(fieldID[0] == "ingredient") {
+						amount = amountField.val();
+						ingredient = ingredientField.val();
+						if (ingredientField.val().length || amountField.val().length) { 
+							amount = amountField.val();
+							ingredient = ingredientField.val();						
+							ingredients[fieldID[1]] = {
+								"amt": amount,
+								"ingredient": ingredient
+							
+							
+							};
+						
+							ingredientsJsonField.val(JSON.stringify(ingredients));
+						}
+					} else if (fieldID[0] == "step") {
+						step = stepField.val();
+						if (stepField.val().length) { 
+							steps[fieldID[1]] = {
+								"step": step
+							
+							
+							};
+						
+							stepsJsonField.val(JSON.stringify(steps));
+						}
+					}
+					
+				});	
+			
+			$("#recipeForm").submit();
+
+			});
+			
+			
+		},
+		
+		addIngredients: function() {
+			var link = $("#addIngredients");
+			
+			$(link).click(function(e) {
+				e.preventDefault();
+				lastIngredient = link.prev("fieldset");
+				lastNumberString = lastIngredient.attr("id").split("_"); //Last ingredient Number
+				lastNumber = parseFloat(lastNumberString[1]) + 1;
+				nextIngredients = "";
+				for (var i=0; i<3; i++) {
+					//debugger;
+					nextIngredients += "<fieldset class='pre_pop ingredient_group' id='ingredient_" + lastNumber + "'><input type='text' placeholder='Amount' name='ingredient_amt' id='ingredient" + lastNumber + "_amt' class='amt' /><input type='text' placeholder='Ingredient' name='ingredient_ingredient' id='ingredient" + lastNumber + "_ingredient' class='ingredient' /></fieldset>";
+					lastNumber += 1;
+
+				}
+				
+				
+				
+				lastIngredient.after(nextIngredients);
+			});
+		
+		
+		},
+		
+		addSteps: function() {
+			var link = $("#addSteps");
+			
+			$(link).click(function(e) {
+				e.preventDefault();
+				lastStep = link.prev("fieldset");
+				lastNumberString = lastStep.attr("id").split("_"); //Last step Number
+				lastNumber = parseFloat(lastNumberString[1]) + 1;
+				nextSteps = "";
+				for (var i=0; i<2; i++) {
+					//debugger;
+					nextSteps += "<fieldset class='pre_pop step_group' id='step_" + lastNumber + "'><textarea placeholder='Step' name='step' id='step" + lastNumber + "' class='step' /></textarea></fieldset>";
+					lastNumber += 1;
+
+				}
+				
+				
+				
+				lastStep.after(nextSteps);
+			});
+		
+		
+		},
+		
+		init: function() {
+			this.recipeForm();
+			this.addIngredients();
+			this.addSteps();
+		}
+	
+	},
+	
+	init: function() {
+		
+		var self = this;
+		
+		self.forms.init();
+	}
+
+}
+recipe.init();
+
+</script>
+
+
+
+</body>
+</html>

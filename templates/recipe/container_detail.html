@@ -1,188 +1,79 @@
-<html>
-<head>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-</head>
-
-<body>
-
-
-<h1>{{ container.title }}</h1>
-<p>{{ container.summary }}</p>
-Versions: {{ version.ingredients }}
-ID = {{ container }}
-
-
-<br/>
-<h2>Ingredients</h2>
-<ul>
-{% for ingredient, value in version.ingredients.items %}
-
-	<li>{{ value.amt }} -- {{ value.ingredient }}</li>
-
-{% endfor %}
-</ul>
-
-<h2>Steps</h2>
-<ol>
-{% for key, step in version.steps.items %}
-
-	<li>{{ step.step }}</li>
-
-{% endfor %}
-</ol>
-
-<h2>Versions</h2>
-<ol>
-{% for version in version_list reversed %}
-
-	<li>{{ version.Note }}</li>
-
-{% endfor %}
-</ol>
-
-<h1>Edit recipe</h1>
-
-
-<form action="" method="post" id="recipeForm">{% csrf_token %}
-<label>Ingredients</label>
-<fieldset class="pre_pop" id="ingredient_1">
-<input type="text" placeholder="Amount 1" name="ingredient0_amt" id="ingredient1_amt" class="amt" />
-<input type="text" placeholder="Ingredient 1" name="ingredient1_ingredient" id="ingredient1_ingredient" class="ingredient" />
-</fieldset>
-<fieldset class="pre_pop" id="ingredient_2">
-<input type="text" placeholder="Amount 2" name="ingredient0_amt" id="ingredient2_amt" class="amt" />
-<input type="text" placeholder="Ingredient 2" name="ingredient1_ingredient" id="ingredient2_ingredient" class="ingredient" />
-</fieldset>
-<fieldset class="pre_pop" id="ingredient_3">
-<input type="text" placeholder="Amount 3" name="ingredient3_amt" id="ingredient3_amt" class="amt" />
-<input type="text" placeholder="Ingredient 3" name="ingredient3_ingredient" id="ingredient3_ingredient" class="ingredient" />
-</fieldset>
-<fieldset class="pre_pop" id="step_1">
-	<textarea placeholder="Step 1" name="step1" id="step1" class="step"></textarea>
-</fieldset>
-<fieldset>
-	{{ version_form.Note }}
-</fieldset>
+{% extends "base.html" %}
+{% block post_style %}{{ block.super }} 
 
 
 
-<input type="submit" value="submit" id="submitRecipe" />
+{% endblock %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="span12">
+		<h1>{{ container.title }}</h1>
+		<p>{{ container.summary }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span8">		
+			<h3>Ingredients</h3>
+			<ul>
+			{% for ingredient, value in version.ingredients.items %}
+			
+				<li>{{ value.amt }} -- {{ value.ingredient }}</li>
+			
+			{% endfor %}
+			</ul>
+			
+			<h3>Steps</h3>
+			<ol>
+			{% for key, step in version.steps.items %}
+			
+				<li>{{ step.step }}</li>
+			
+			{% endfor %}
+			</ol>
+		</div>
+		
+		<div class="span4">
+			<h3>Versions</h3>
+			<table class="table table-striped">
+			{% for version in version_list reversed %}
+			
+				<tr><td>{{ version.Note }}</td></tr>
+			
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+	<h1>Edit recipe</h1>
+	
+	
+	<form action="" method="post" id="recipeForm">{% csrf_token %}
 
-<div style="display:none;">
-{{ version_form.ingredients }}
-{{ version_form.steps }}
-{{ version_form.recipe }}
+	{% include "includes/static_form.html" %}
+
+	<fieldset>
+		{{ version_form.Note }}
+	</fieldset>
+	
+	
+	
+	<input type="submit" value="submit" id="submitRecipe" class="btn btn-success btn-large" />
+	
+	<div style="display:none;">
+	{{ version_form.ingredients }}
+	{{ version_form.steps }}
+	{{ version_form.recipe }}
+	</div>
+	
+	
+	</form>
+	
+	
+	
+	
+	
+	
 </div>
 
 
-</form>
-
-
-
-
-
-
-
-
-{% comment %}<input type="text" name="ingredient" placeholder="Ingredient" /><br />
-<input type="text" name="ingredient" placeholder="Ingredient" /><br />
-<input type="text" name="ingredient" placeholder="Ingredient" /><br />
-<input type="text" name="ingredient" placeholder="Ingredient" /><br />
-
-<textarea name="step"></textarea><br />
-<textarea name="step"></textarea><br />
-<textarea name="step"></textarea><br />
-
-<textarea name="comment"></textarea>
-<br />
-<input type="hidden" value="{{ container.id }}" />{% endcomment %}
-
-
-
-
-
-<script>
-var recipe = {
-
-	forms: {
-	
-		recipeForm: function() {
-			var ingredientsJsonField = $("#id_ingredients");
-			var stepsJsonField = $("#id_steps");
-			var prePops = $(".pre_pop");
-			var submit = $("#submitIngredients");
-			var fieldSets = $("form fieldset");
-			var fieldID;
-			$("#submitRecipe").click(function(e) {
-				e.preventDefault();
-				var ingredients = {};
-				var steps = {};
-				$.each(fieldSets, function(key, fieldset) {
-					var fieldID = "";
-					var self = this;
-					fieldID = fieldset.id.split("_");					
-					var amountField = $(self).find("input.amt");
-					var ingredientField = $(self).find("input.ingredient");
-					var stepField = $(self).find("textarea.step")
-					if(fieldID[0] == "ingredient") {
-						amount = amountField.val();
-						ingredient = ingredientField.val();
-						if (ingredientField.val().length || amountField.val().length) { 
-							amount = amountField.val();
-							ingredient = ingredientField.val();						
-							ingredients[fieldID[1]] = {
-								"amt": amount,
-								"ingredient": ingredient
-							
-							
-							};
-						
-							ingredientsJsonField.val(JSON.stringify(ingredients));
-						}
-					} else if (fieldID[0] == "step") {
-						step = stepField.val();
-						if (stepField.val().length) { 
-							steps[fieldID[1]] = {
-								"step": step
-							
-							
-							};
-						
-							stepsJsonField.val(JSON.stringify(steps));
-						}
-					}
-					
-				});	
-			
-			$("#recipeForm").submit();
-
-			});
-			
-			
-		},
-		
-		init: function() {
-			this.recipeForm();
-		}
-	
-	},
-	
-	init: function() {
-		
-		var self = this;
-		
-		self.forms.init();
-	}
-
-}
-recipe.init();
-
-
-</script>
-
-
-
-</body>
-</html>
+{% endblock %}

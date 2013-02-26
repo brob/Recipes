@@ -1,5 +1,5 @@
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
 import datetime
 from recipe.models import *
 from recipe.forms import *
@@ -7,7 +7,7 @@ from django.forms import *
 from django.views.generic import *
 from django.core.context_processors import csrf
 from django.forms.models import inlineformset_factory
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 import json
 import django.utils.simplejson as simplejson
@@ -93,3 +93,37 @@ def RecipeEdit(request, slug):
 #        "test": version_form,
 		"version_form": version_form,
     }, context_instance=RequestContext(request))
+    
+    
+    
+def RecipeAdd(request):
+#	VersionFormSet = VersionForm
+	RecipeFormSet = RecipeForm
+	VersionFormSet = inlineformset_factory(Recipe, Version, max_num=1)	
+    
+	if request.POST:
+#		version_formset = VersionFormSet(request.POST, instance=Recipe)
+		c = {}
+		c.update(csrf(request))
+		
+		recipe_form = RecipeFormSet(request.POST)
+		if recipe_form.is_valid():
+			new_recipe = recipe_form.save()
+			version_form = VersionFormSet(request.POST, request.FILES, instance=new_recipe)
+			if version_form.is_valid():
+				version_form.save();
+				slug = new_recipe.slug
+		return redirect('/')
+		#return HttpResponseRedirect(reverse('recipe:RecipeEdit', args=(request, slug)))
+		
+	
+	else:
+		c = {}
+		c.update(csrf(request))
+		recipe_form = RecipeFormSet()
+		version_formset = VersionFormSet(instance=Recipe)	
+		
+		return render_to_response("recipe/add.html", {
+			"recipe_form": recipe_form,
+			"version_form": version_formset,
+		}, context_instance=RequestContext(request))

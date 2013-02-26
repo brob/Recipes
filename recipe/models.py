@@ -7,7 +7,7 @@ from django import forms
 from django.forms.formsets import formset_factory
 import jsonfield
 from django.forms.widgets import *
-
+from django.template.defaultfilters import slugify
 
  
 class Recipe(models.Model):
@@ -40,6 +40,16 @@ class IngredientForm(forms.Form):
 
 class StepForm(forms.Form):
 	step = forms.CharField()
+
+class RecipeForm(forms.ModelForm):
+	class Meta:
+		model = Recipe
+		widgets = {
+			'slug': forms.HiddenInput(),
+		}
+	def save(self, *args, **kwargs):
+		self.fields['slug'] = slugify(self.fields['title'])
+		super(RecipeForm, self).save(*args, **kwargs)
 
 class VersionForm(forms.ModelForm):
 	class Meta:
