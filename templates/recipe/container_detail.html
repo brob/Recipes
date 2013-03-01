@@ -1,64 +1,79 @@
-<html>
-<h1>{{ container.title }}</h1>
-<p>{{ container.summary }}</p>
-Versions: {{ container.version_set.count }}
-ID = {{ container }}
+{% extends "base.html" %}
+{% block post_style %}{{ block.super }} 
 
 
 
-<br/>
-Test value {{ test }}<br /><br/>
-{% for version in container.version_set.all %}
-
-{% if forloop.first %}
-
-<h3>Ingredients</h3>
-
-	<li>{{ version.Ingredients }}</li>
-
-<h3>Steps</h3>
-
-	<li>{{ version.Steps }}
-
-<h3>Notes</h3>
-<p>{{ version.Note }}</p>
+{% endblock %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="span12">
+		<h1>{{ container.title }}</h1>
+		<p>{{ container.summary }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span8">		
+			<h3>Ingredients</h3>
+			<ul>
+			{% for ingredient, value in version.ingredients.items %}
+			
+				<li>{{ value.amt }} -- {{ value.ingredient }}</li>
+			
+			{% endfor %}
+			</ul>
+			
+			<h3>Steps</h3>
+			<ol>
+			{% for key, step in version.steps.items %}
+			
+				<li>{{ step.step }}</li>
+			
+			{% endfor %}
+			</ol>
+		</div>
+		
+		<div class="span4">
+			<h3>Versions</h3>
+			<table class="table table-striped">
+			{% for version in version_list reversed %}
+			
+				<tr><td>{{ version.Note }}</td></tr>
+			
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+	<h1>New Version</h1>
 	
 	
-{% endif %}
+	<form action="" method="post" id="recipeForm">{% csrf_token %}
 
-{% endfor %}
-<h1>Edit recipe</h1>
+	{% include "includes/static_form.html" %}
+
+	<fieldset>
+		{{ version_form.Note }}
+	</fieldset>
+	
+	
+	
+	<input type="submit" value="submit" id="submitRecipe" class="btn btn-success btn-large" />
+	
+	<div style="display:none;">
+	{{ version_form.ingredients }}
+	{{ version_form.steps }}
+	{{ version_form.recipe }}
+	</div>
+	
+	
+	</form>
+	
+	
+	
+	
+	
+	
+</div>
 
 
-<form action="." method="post">{% csrf_token %}
-
-
-
-{{ ingredient_formset.as_p }}
-{{ step_formset.as_p }}
-{{ form.as_p }}
-
-<input type="submit" value="submit" />
-
-</form>
-
-
-
-
-
-
-
-
-{% comment %}<input type="text" name="ingredient" placeholder="Ingredient" /><br />
-<input type="text" name="ingredient" placeholder="Ingredient" /><br />
-<input type="text" name="ingredient" placeholder="Ingredient" /><br />
-<input type="text" name="ingredient" placeholder="Ingredient" /><br />
-
-<textarea name="step"></textarea><br />
-<textarea name="step"></textarea><br />
-<textarea name="step"></textarea><br />
-
-<textarea name="comment"></textarea>
-<br />
-<input type="hidden" value="{{ container.id }}" />{% endcomment %}
-</html>
+{% endblock %}
