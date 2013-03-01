@@ -1,5 +1,7 @@
 from django.db import models
 #from tagging.fields import TagField
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.contrib import admin
 import django.forms as forms
 from django.forms import ModelForm
@@ -47,9 +49,7 @@ class RecipeForm(forms.ModelForm):
 		widgets = {
 			'slug': forms.HiddenInput(),
 		}
-	def save(self, *args, **kwargs):
-		self.fields['slug'] = slugify(self.fields['title'])
-		super(RecipeForm, self).save(*args, **kwargs)
+
 
 class VersionForm(forms.ModelForm):
 	class Meta:
@@ -59,4 +59,3 @@ class VersionForm(forms.ModelForm):
 			'ingredients' : forms.HiddenInput(),
 			'steps' : forms.HiddenInput(),
 		}
-		

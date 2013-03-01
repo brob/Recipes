@@ -6,10 +6,21 @@
 	height:30px;
 }
 .container input.btn {
-	padding:8px 30px;
+	height: 45px;
+    padding: 0 45px;
 }
 input.amt {
 	width:40px;
+}
+
+a.addLink {
+	position:fixed;
+	top:20px;
+	right:20px;
+
+}
+#id_title {
+	height:35px;
 }
 
 </style>
@@ -21,7 +32,7 @@ input.amt {
 </head>
 
 <body>
-
+<a class="addLink btn btn-large btn-primary" href="/recipe/add/"><i class="icon-plus-sign icon-white"></i> Add Recipe</a>
 
 {% block body %}{% endblock %}
 
