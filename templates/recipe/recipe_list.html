@@ -1,8 +1,17 @@
-<html>
+{% extends "base.html" %}
+{% block post_style %}{{ block.super }} 
+
+
+
+{% endblock %}
+{% block body %}
+<div class="container">
 <h1>Recipes</h1>
 
 
     {% for recipe in recipe_list %}
     	<li><a href="/recipe/{{ recipe.slug }}">{{ recipe.title }}</a></li>
     {% endfor %}
-</html>
+</div>
+
+{% endblock %}

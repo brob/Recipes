@@ -22,6 +22,7 @@ urlpatterns = patterns('',
    	url(r'^recipe/add/', RecipeAdd), 
 	url(r'^recipe/(?P<slug>[-_\w]+)/$', RecipeEdit),
 	url(r'^recipe/(?P<slug>[-_\w]+)/edit/$', RecipeEdit),
+	url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
 
     # url(r'^mysite/', include('mysite.foo.urls')),
     #url(r'^$', ArticleListView.as_view(), name='article-list'),

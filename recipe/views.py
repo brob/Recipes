@@ -106,6 +106,7 @@ def RecipeEdit(request, slug):
     
     
 def RecipeAdd(request):
+	testUser = request.user
 	VersionFormSet = VersionForm
 	RecipeFormSet = RecipeForm
 #	VersionFormSet = inlineformset_factory(Recipe, Version, max_num=1)	
@@ -120,6 +121,7 @@ def RecipeAdd(request):
 			new_recipe = recipe_form.save(commit=False)
 			new_recipe.slug = slugify(new_recipe.title)
 			recipe_id = new_recipe.id
+			new_recipe.created_by = testUser
 			new_recipe.save()
 			postData['recipe'] = new_recipe.id
 			postData['Note'] = "First Version"
@@ -161,4 +163,5 @@ def RecipeAdd(request):
 		return render_to_response("recipe/add.html", {
 			"recipe_form": recipe_form,
 			"version_form": version_formset,
+			"test": testUser,
 		}, context_instance=RequestContext(request))
