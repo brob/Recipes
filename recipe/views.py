@@ -16,33 +16,25 @@ def current_datetime(request):
     now = datetime.datetime.now()
     html = "<html><body>It is now %s.</body></html>" % now
     return HttpResponse(html)
-    
-class RecipeList(ListView):
+
+
+def RecipeList(request):
+	if request.user.is_authenticated():
 	
-	model = Recipe
-	
-	def get_context_data(self, **kwargs):
-		context = super(RecipeList, self).get_context_data(**kwargs)
-#		context['now'] = timezone.now()
-		return context
-
-class RecipeDetail(DetailView):
-	model = Recipe
-
-
-
-	def get_context_data(self, **kwargs):
-		context = super(RecipeDetail, self).get_context_data(**kwargs)
-		version_container = context['container'].id
-		version_form = VersionForm(initial={'Recipe': version_container})
-		IngredientInlineFormSet = IngredientFormSet
-		StepInlineFormSet = StepFormSet   
-	
-		context['version_form'] = version_form
-		context['ingredient_form'] = IngredientInlineFormSet
-		context['step_form'] = StepInlineFormSet
-		#context['test'] = StepInlineFormSet
-		return context
+		user = request.user
+		recipes = Recipe.objects.filter(created_by = user)
+		
+		return render_to_response("recipe/recipe_list.html", {
+			"recipes": recipes,
+			"user": user,
+		}, context_instance=RequestContext(request))
+	else:
+		#redirectUrl = "/login/"
+		#return redirect(redirectUrl)
+		return render_to_response("recipe/recipe_list.html", {
+			"user": user,
+		}, context_instance=RequestContext(request))
+		
 		
 def RecipeEdit(request, slug):
     VersionFormSet = VersionForm
@@ -66,7 +58,7 @@ def RecipeEdit(request, slug):
         form = version_form(request.POST)
         if form.is_valid():
             form.save()
-            return render_to_response("recipe/container_detail.html", {
+            return render_to_response("recipe/recipe_detail.html", {
             	"container": container,
             	"version": container.version_set.latest(field_name='id'),
             	"version_list": container.version_set.all(),
