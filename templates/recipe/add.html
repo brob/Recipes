@@ -8,28 +8,38 @@
 
 {% block body %}
 <div class="container">
-{{ test }}
-{{ recipe_form_errors }}
-{{ version_form_errors }}
-<form action="" id="recipeForm" method="post">{% csrf_token %}
 
-<legend>General Info</legend>
-<fieldset><label for="title">Title</label>{{ recipe_form.title.error }} {{ recipe_form.title }}</fieldset>
-<fieldset><label for="summary">Description</label>{{ recipe_form.summary.error }} {{ recipe_form.summary }}</fieldset>
-<br />{{ recipe_form.slug.error }}
-{% include "includes/static_form.html" %}
+{% if user.is_authenticated %}
 
-
-<br /><br />
+	{{ recipe_form_errors }}
+	{{ version_form_errors }}
+	<form action="" id="recipeForm" method="post">{% csrf_token %}
 	
-	<input type="submit" value="submit" id="submitRecipe" class="btn btn-success btn-large" />
+	<legend>General Info</legend>
+	<fieldset><label for="title">Title</label>{{ recipe_form.title.error }} {{ recipe_form.title }}</fieldset>
+	<fieldset><label for="summary">Description</label>{{ recipe_form.summary.error }} {{ recipe_form.summary }}</fieldset>
+	<br />{{ recipe_form.slug.error }}
+	{% include "includes/static_form.html" %}
 	
-	<div style="display:none;">
-	{{ version_form.as_p }}
+	
+	<br /><br />
+		
+		<input type="submit" value="submit" id="submitRecipe" class="btn btn-success btn-large" />
+		
+		<div style="display:none;">
+		{{ version_form.as_p }}
+	
+		{{ recipe_form.slug }}
+		</div>
+		
+	</form>
 
-	{{ recipe_form.slug }}
-	</div>
-	
-</form>
+{% else %}
+
+	<h1>Please log in</h1>
+
+{% endif %}
+
+
 </div>
 {% endblock %}
