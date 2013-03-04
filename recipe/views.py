@@ -157,3 +157,11 @@ def RecipeAdd(request):
 			"version_form": version_formset,
 			"test": testUser,
 		}, context_instance=RequestContext(request))
+
+def Profile(request):
+
+	profileUser = request.user
+	
+	return render_to_response("registration/profile.html", {
+		"user": profileUser
+	}, context_instance=RequestContext(request))

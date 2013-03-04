@@ -23,6 +23,13 @@ a.addLink {
 	height:35px;
 }
 
+a#logo {
+	width:300px;
+	height:100px;
+	border:1px solid;
+	float:left;
+}
+
 </style>
 {% block post_style %}{% endblock %}
 
@@ -34,8 +41,17 @@ a.addLink {
 <body>
 <a class="addLink btn btn-large btn-primary" href="/recipe/add/"><i class="icon-plus-sign icon-white"></i> Add Recipe</a>
 
-{% block body %}{% endblock %}
 
+<div class="container">
+
+	<div class="row" id="header">
+		<a href="/recipes/" id="logo">Logo/home</a>
+	</div>
+
+<div class="row" id="content">
+{% block content %}{% endblock %}
+</div>
+</div>
 
 <script>
 

@@ -6,10 +6,8 @@
 {% endblock %}
 
 
-{% block body %}
-<div class="container">
-{{ test }}
-
+{% block content %}
+{{ user }}
 {% if user.is_authenticated %}
 
 	{{ recipe_form_errors }}
@@ -42,5 +40,4 @@
 {% endif %}
 
 
-</div>
 {% endblock %}
