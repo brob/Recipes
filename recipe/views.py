@@ -29,6 +29,7 @@ def RecipeList(request):
 			"user": user,
 		}, context_instance=RequestContext(request))
 	else:
+		user = request.user
 		#redirectUrl = "/login/"
 		#return redirect(redirectUrl)
 		return render_to_response("recipe/recipe_list.html", {
