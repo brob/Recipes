@@ -18,11 +18,17 @@ info_dict = {
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', RecipeList.as_view(), name='container_list'),
+    url(r'^$', RecipeList),
+    url(r'^recipe/$', RecipeList),
+    url(r'^recipes/$', RecipeList),
    	url(r'^recipe/add/', RecipeAdd), 
 	url(r'^recipe/(?P<slug>[-_\w]+)/$', RecipeEdit),
 	url(r'^recipe/(?P<slug>[-_\w]+)/edit/$', RecipeEdit),
-
+	#url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+	(r'^accounts/', include('registration.backends.default.urls')),
+	url(r'^accounts/profile/', Profile),
+	
+	
     # url(r'^mysite/', include('mysite.foo.urls')),
     #url(r'^$', ArticleListView.as_view(), name='article-list'),
 

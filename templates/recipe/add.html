@@ -6,11 +6,18 @@
 {% endblock %}
 
 
+<<<<<<< HEAD
 {% block body %}
 <div class="container">
 
 {% if user.is_authenticated %}
 
+=======
+{% block content %}
+{{ user }}
+{% if user.is_authenticated %}
+
+>>>>>>> User-integration
 	{{ recipe_form_errors }}
 	{{ version_form_errors }}
 	<form action="" id="recipeForm" method="post">{% csrf_token %}
@@ -41,5 +48,8 @@
 {% endif %}
 
 
+<<<<<<< HEAD
 </div>
+=======
+>>>>>>> User-integration
 {% endblock %}

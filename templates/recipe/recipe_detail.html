@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block post_style %}{{ block.super }} 
+
+
+
+{% endblock %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="span12">
+		<h1>{{ container.title }}</h1>
+		<p>{{ container.summary }}</p>
+		<p>Created by {{ container.created_by }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span8">		
+			<h3>Ingredients</h3>
+			<ul>
+			{% for ingredient, value in version.ingredients.items %}
+			
+				<li>{{ value.amt }} -- {{ value.ingredient }}</li>
+			
+			{% endfor %}
+			</ul>
+			
+			<h3>Steps</h3>
+			<ol>
+			{% for key, step in version.steps.items %}
+			
+				<li>{{ step.step }}</li>
+			
+			{% endfor %}
+			</ol>
+		</div>
+		
+		<div class="span4">
+			<h3>Versions</h3>
+			<table class="table table-striped">
+			{% for version in version_list reversed %}
+			
+				<tr><td>{{ version.Note }}</td></tr>
+			
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+
+{% ifequal user container.created_by %}
+
+	<h1>New Version</h1>
+	
+	
+	<form action="" method="post" id="recipeForm">{% csrf_token %}
+
+	{% include "includes/static_form.html" %}
+
+	<fieldset>
+		<label>Make a note about your revision</label>
+		{{ version_form.Note }}
+	</fieldset>
+	
+	
+	
+	<input type="submit" value="submit" id="submitRecipe" class="btn btn-success btn-large" />
+	
+	<div style="display:none;">
+	{{ version_form.ingredients }}
+	{{ version_form.steps }}
+	{{ version_form.recipe }}
+	</div>
+	
+	
+	</form>
+	
+	
+	
+	
+{% endifequal %}	
+	
+</div>
+
+
+{% endblock %}

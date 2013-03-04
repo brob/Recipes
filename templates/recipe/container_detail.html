@@ -4,12 +4,12 @@
 
 
 {% endblock %}
-{% block body %}
-<div class="container">
+{% block content %}
 	<div class="row">
 		<div class="span12">
 		<h1>{{ container.title }}</h1>
 		<p>{{ container.summary }}</p>
+		<p>Created by {{ container.created_by }}</p>
 		</div>
 	</div>
 	<div class="row">
@@ -44,6 +44,9 @@
 			</table>
 		</div>
 	</div>
+
+{% ifequal user container.created_by %}
+
 	<h1>New Version</h1>
 	
 	
@@ -52,6 +55,7 @@
 	{% include "includes/static_form.html" %}
 
 	<fieldset>
+		<label>Make a note about your revision</label>
 		{{ version_form.Note }}
 	</fieldset>
 	
@@ -71,9 +75,8 @@
 	
 	
 	
+{% endifequal %}	
 	
-	
-</div>
 
 
 {% endblock %}

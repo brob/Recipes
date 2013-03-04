@@ -16,8 +16,10 @@ class Recipe(models.Model):
     title = models.TextField(max_length=200)
     summary = models.TextField(blank=True)
     slug = models.SlugField(blank=True)
+    created_by = models.ForeignKey(User, blank=True)
 #    ingredients = jsonfield.JSONField()
 #    steps = jsonfield.JSONField()
+
 
     class Meta:
         ordering = ['title']
@@ -49,6 +51,7 @@ class RecipeForm(forms.ModelForm):
 		widgets = {
 			'slug': forms.HiddenInput(),
 		}
+		exclude = ('created_by',)
 
 
 class VersionForm(forms.ModelForm):
