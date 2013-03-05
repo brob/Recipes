@@ -18,7 +18,6 @@ info_dict = {
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', RecipeList),
     url(r'^recipe/$', RecipeList),
     url(r'^recipes/$', RecipeList),
    	url(r'^recipe/add/', RecipeAdd), 
